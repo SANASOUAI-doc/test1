@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Drag and Sort Tasks</title>
+  <style>
+    .sortable-list {
+      list-style-type: none;
+      padding: 0;
+      margin: 20px;
+      width: 300px;
+    }
+
+    .sortable-item {
+      background-color: #f0f0f0;
+      border: 1px solid #ccc;
+      margin: 5px;
+      padding: 10px;
+      cursor: grab;
+    }
+  </style>
+</head>
+<body>
+
+<ul id="sortable-list" class="sortable-list" ondrop="drop(event)" ondragover="allowDrop(event)">
+  <li id="task1" class="sortable-item" draggable="true" ondragstart="drag(event)">Task 1</li>
+  <li id="task2" class="sortable-item" draggable="true" ondragstart="drag(event)">Task 2</li>
+  <li id="task3" class="sortable-item" draggable="true" ondragstart="drag(event)">Task 3</li>
+  <!-- Add more tasks as needed -->
+</ul>
+
+<script>
+  function allowDrop(event) {
+    event.preventDefault();
+  }
+
+  function drag(event) {
+    event.dataTransfer.setData("text", event.target.id);
+  }
+
+  function drop(event) {
+    event.preventDefault();
+    var data = event.dataTransfer.getData("text");
+    var draggedElement = document.getElementById(data);
+    var dropTarget = event.target;
+
+    // Ensure the drop target is a valid list item
+    if (dropTarget.classList.contains('sortable-item')) {
+      // If the drop target is not the dragged element itself
+      if (dropTarget !== draggedElement) {
+        // Swap the positions of the dragged element and the drop target
+        var parent = dropTarget.parentNode;
+        var nextSibling = dropTarget.nextElementSibling;
+
+        if (nextSibling === draggedElement) {
+          parent.insertBefore(draggedElement, dropTarget);
+        } else {
+          parent.insertBefore(draggedElement, nextSibling);
+        }
+      }
+    }
+  }
+</script>
+
+</body>
+</html>
